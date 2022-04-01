@@ -94,7 +94,13 @@ router.post(
             })
           );
         });
-        const results = await Promise.all(promiseArray);
+        let resultErr = null;
+        const results = await Promise.all(promiseArray).catch((err) => {
+          resultErr = err;
+        });
+        if (resultErr) {
+          return res.status(500).json({ error: resultErr });
+        }
         files.forEach((file) => fs.unlink(file.path, (err) => {}));
         results.forEach((result) => uploadedFiles.push(result));
       }
