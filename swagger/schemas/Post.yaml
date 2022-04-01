@@ -1,0 +1,53 @@
+Post:
+  type: object
+  properties:
+    thread:
+      required: true
+      description: The thread that this post was posted on
+      $ref: "#/components/schemas/Thread"
+    title:
+      type: string
+      required: true
+      description: Title of the post
+    content:
+      type: string
+      required: true
+      description: Content of the post
+    author:
+      required: true
+      description: Who wrote this post
+      $ref: "#/components/schemas/User"
+    slug:
+      type: string
+      required: true
+      description: Unique slug to search for the post
+    anonymous:
+      type: boolean
+      required: true
+      description: A boolean to switch between anonymous data will be returned or not
+    upvotes:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+      description: List of users who upvoted
+    downvotes:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+      description: List of users who downvoted
+    comments:
+      type: array
+      items:
+        $ref: "#/components/schemas/Comment"
+      description: List of comments
+    category:
+      type: string
+      description: The category of this post
+    createdAt:
+      type: string
+      format: date-time
+      description: The time that this post was created
+    updatedAt:
+      type: string
+      format: date-time
+      description: The time that this post was last updated

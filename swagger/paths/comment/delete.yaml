@@ -1,0 +1,62 @@
+/threads/{threadSlug}/posts/{postSlug}/comments/delete/{commentSlug}:
+  delete:
+    summary: Delete a comment
+    tags: [Comment]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: threadSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the thread
+      - in: path
+        name: postSlug
+        schema:
+          type: string
+        description: The slug of the post
+        required: true
+      - in: path
+        name: commentSlug
+        schema:
+          type: string
+        description: The slug of the comment
+        required: true
+    responses:
+      200:
+        description: The comment was deleted
+        content:
+          application/json:
+            example:
+              message: The comment was deleted
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (not the author)
+        content:
+          application/json:
+            example:
+              error: You are not authorized to do this
+      404:
+        description: The thread or post or comment does not exist
+        content:
+          application/json:
+            example:
+              error: The thread or post or comment does not exist
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

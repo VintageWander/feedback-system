@@ -1,0 +1,45 @@
+/auth/login:
+  post:
+    summary: Login a user
+    tags: [Authentication]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                required: true
+                format: email
+              password:
+                type: string
+                required: true
+                format: password
+    responses:
+      200:
+        description: Create refresh and access token
+        content:
+          application/json:
+            example:
+              accessToken: some_access_token
+              refreshToken: some_refresh_token
+      401:
+        description: Wrong refresh token
+        content:
+          application/json:
+            example:
+              error: Wrong refresh token
+      403:
+        description: Invalid email or password
+        content:
+          application/json:
+            example:
+              error: Invalid credentials
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

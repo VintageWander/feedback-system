@@ -1,0 +1,50 @@
+/manage/posts/delete/{postSlug}:
+  delete:
+    summary: Deletes a post
+    tags: [Manage]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: postSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the post
+    responses:
+      200:
+        description: The post was deleted
+        content:
+          application/json:
+            example:
+              message: Post deleted successfully
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (permission denied)
+        content:
+          application/json:
+            example:
+              error: You are not authorized to delete this post
+      404:
+        description: Post not found
+        content:
+          application/json:
+            example:
+              error: Post not found
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

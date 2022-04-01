@@ -1,0 +1,69 @@
+/threads/update/{threadSlug}:
+  put:
+    summary: Updates a thread
+    tags: [Thread]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: threadSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the thread to update
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              topic:
+                type: string
+                required: true
+              description:
+                type: string
+                required: true
+              postDeadline:
+                type: number
+                required: true
+              commentDeadline:
+                type: number
+                required: true
+    responses:
+      200:
+        description: The thread was updated
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Thread"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (not the creator)
+        content:
+          application/json:
+            example:
+              error: You are not authorized to update this thread
+      404:
+        description: Thread not found
+        content:
+          application/json:
+            example:
+              error: Thread not found
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

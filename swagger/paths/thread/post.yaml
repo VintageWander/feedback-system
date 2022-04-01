@@ -1,0 +1,50 @@
+/threads/create:
+  post:
+    summary: Creates a thread
+    tags: [Thread]
+    security:
+      - bearerAuth:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              topic:
+                type: string
+                required: true
+              description:
+                type: string
+                required: true
+              postDeadline:
+                type: number
+                required: true
+              commentDeadline:
+                type: number
+                required: true
+    responses:
+      200:
+        description: New thread created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Thread"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

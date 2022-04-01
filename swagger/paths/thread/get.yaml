@@ -1,0 +1,25 @@
+/threads:
+  get:
+    summary: Returns a list of threads
+    tags: [Thread]
+    responses:
+      200:
+        description: An array of threads
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Thread"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

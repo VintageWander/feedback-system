@@ -1,0 +1,71 @@
+User:
+  type: object
+  properties:
+    email:
+      type: string
+      required: true
+      format: email
+      description: User's email address
+    username:
+      type: string
+      required: true
+      description: Username
+    password:
+      type: string
+      required: true
+      description: User's password
+    dob:
+      type: string
+      format: date-time
+      description: Date of Birth
+    role:
+      type: string
+      enum: [staff, admin, manager, coodinator]
+      description: User's role
+    slug:
+      type: string
+      required: true
+      description: Unique slug to search for user
+    threads:
+      type: array
+      items:
+        $ref: "#/components/schemas/Thread"
+      description: List of thread posted by the user
+    posts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Post"
+      description: List of thread posted by the user
+    comments:
+      type: array
+      items:
+        $ref: "#/components/schemas/Comment"
+      description: List of comments made by the user
+    upvotedPosts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Post"
+      description: List of posts that the user upvoted
+    downvotedPosts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Post"
+      description: List of posts that the user downvoted
+    upvotedComments:
+      type: array
+      items:
+        $ref: "#/components/schemas/Comment"
+      description: List of comments that the user upvoted
+    downvotedComments:
+      type: array
+      items:
+        $ref: "#/components/schemas/Comment"
+      description: List of comments that the user upvoted
+    createdAt:
+      type: string
+      format: date-time
+      description: The time that this thread was created
+    updatedAt:
+      type: string
+      format: date-time
+      description: The time that this thread was last updated

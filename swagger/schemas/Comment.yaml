@@ -1,0 +1,45 @@
+Comment:
+  type: object
+  properties:
+    post:
+      required: true
+      description: The post that this comment was posted on
+      $ref: "#/components/schemas/Post"
+    author:
+      required: true
+      description: Author of the comment
+      $ref: "#/components/schemas/User"
+    title:
+      type: string
+      required: true
+      description: Title of the comment
+    content:
+      type: string
+      required: true
+      description: Content of the comment
+    slug:
+      type: string
+      required: true
+      description: Unique slug to find the comment
+    anonymous:
+      type: boolean
+      required: true
+      description: A boolean to switch between anonymous data will be returned or not
+    upvotes:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+      description: List of users who upvoted
+    downvotes:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+      description: List of users who downvoted
+    createdAt:
+      type: string
+      format: date-time
+      description: The time this comment was created
+    updatedAt:
+      type: string
+      format: date-time
+      description: The time that this comment was last updated

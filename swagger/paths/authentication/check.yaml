@@ -1,0 +1,25 @@
+/auth/check:
+  post:
+    summary: Check if access token is working
+    tags: [Authentication]
+    security:
+      - bearerAuth:
+    responses:
+      200:
+        description: A user associated with the access token
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      401:
+        description: Invalid access token
+        content:
+          application/json:
+            example:
+              error: Invalid access token
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

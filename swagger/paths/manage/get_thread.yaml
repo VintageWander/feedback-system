@@ -1,0 +1,40 @@
+/manage/threads/{threadSlug}:
+  get:
+    summary: Get a specific thread by slug
+    tags: [Manage]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: threadSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the thread
+    responses:
+      200:
+        description: The thread
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Thread"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (permission denied)
+        content:
+          application/json:
+            example:
+              error: Permission denied
+      404:
+        description: The thread does not exist

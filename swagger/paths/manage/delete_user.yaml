@@ -1,0 +1,50 @@
+/manage/users/delete/{userSlug}:
+  delete:
+    summary: Deletes a user
+    tags: [Manage]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: userSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the user
+    responses:
+      200:
+        description: The user was deleted
+        content:
+          application/json:
+            example:
+              message: User deleted successfully
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (permission denied)
+        content:
+          application/json:
+            example:
+              error: You are not authorized to delete this User
+      404:
+        description: User not found
+        content:
+          application/json:
+            example:
+              error: User not found
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

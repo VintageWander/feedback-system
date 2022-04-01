@@ -1,0 +1,40 @@
+/manage/comments/{commentSlug}:
+  get:
+    summary: Get a specific comment by slug
+    tags: [Manage]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: commentSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the comment
+    responses:
+      200:
+        description: The comment
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (permission denied)
+        content:
+          application/json:
+            example:
+              error: Permission denied
+      404:
+        description: The post does not exist

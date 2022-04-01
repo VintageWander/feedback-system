@@ -1,0 +1,66 @@
+/threads/{threadSlug}/posts/{postSlug}/comments/create:
+  post:
+    summary: Create a comment
+    tags: [Comment]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: threadSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the thread
+      - in: path
+        name: postSlug
+        schema:
+          type: string
+        description: The slug of the post
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                required: true
+              content:
+                type: string
+                required: true
+              anonymous:
+                type: boolean
+                required: true
+    responses:
+      200:
+        description: The new comment
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      404:
+        description: The thread or post does not exist
+        content:
+          application/json:
+            example:
+              error: The thread or post does not exist
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

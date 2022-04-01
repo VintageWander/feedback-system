@@ -1,0 +1,77 @@
+/threads/{threadSlug}/posts/update/{postSlug}:
+  put:
+    summary: Updates a post
+    tags: [Post]
+    security:
+      - bearerAuth:
+    parameters:
+      - in: path
+        name: threadSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the thread
+      - in: path
+        name: postSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the post
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+              title:
+                type: string
+                required: true
+              content:
+                type: string
+                required: true
+              anonymous:
+                type: boolean
+                required: true
+    responses:
+      200:
+        description: The updated post
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: Error depending on the situation
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (not the author)
+        content:
+          application/json:
+            example:
+              error: You are not the author of this post
+      404:
+        description: Thread or post not found
+        content:
+          application/json:
+            example:
+              error: Thread or post not found
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error

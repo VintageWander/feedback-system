@@ -1,0 +1,45 @@
+/auth/register:
+  post:
+    summary: Register a new user
+    tags: [Authentication]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                required: true
+              username:
+                type: string
+                required: true
+              password:
+                type: string
+                required: true
+                format: password
+              confirmPassword:
+                type: string
+                required: true
+                format: password
+    responses:
+      200:
+        description: User successfully registered
+        content:
+          application/json:
+            example:
+              message: Successfully registered
+      400:
+        description: Password do not match or User already exists
+        content:
+          application/json:
+            example:
+              message: Password do not match or User already exists
+      500:
+        description: Internal server error or user could not be created
+        content:
+          application/json:
+            example:
+              message: Internal server error

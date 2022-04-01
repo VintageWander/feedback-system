@@ -1,0 +1,39 @@
+POST http://localhost:5001/auth/register 
+Content-Type: application/json
+
+{
+	"email": "rest@mail.com",
+	"username": "rest username test",
+	"password": "password",
+	"confirmPassword": "password"
+}
+
+###
+POST http://localhost:5001/auth/login
+Content-Type: application/json
+
+{
+	"email": "rest@mail.com",
+	"password": "password"
+}
+
+###
+GET http://localhost:5001/auth/check
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2MjJiMWI4NGRlOWRmMTcwMDc0OTExM2QiLCJlbWFpbCI6InJlc3RAbWFpbC5jb20iLCJ1c2VybmFtZSI6InJlc3QgdXNlcm5hbWUgdGVzdCIsImlhdCI6MTY0Njk5MjkzOCwiZXhwIjoxNjQ2OTkyOTk4fQ.gTE-06kcNOyNu9TTmH0AnTFA55tbgQYqtbrlAjKsa40
+
+
+###
+POST http://localhost:5001/auth/refresh
+Content-Type: application/json
+
+{
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2MjJiMWI4NGRlOWRmMTcwMDc0OTExM2QiLCJlbWFpbCI6InJlc3RAbWFpbC5jb20iLCJ1c2VybmFtZSI6InJlc3QgdXNlcm5hbWUgdGVzdCIsImlhdCI6MTY0Njk5MjgxNCwiZXhwIjoxNjQ2OTkzMDU0fQ.U2TjIXpXfyYQnZgByFTvSKWCj7wm2NTpGHXZVoXQ08I"
+}
+
+###
+DELETE http://localhost:5001/auth/logout
+Content-Type: application/json
+
+{
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2MjJiMWI4NGRlOWRmMTcwMDc0OTExM2QiLCJlbWFpbCI6InJlc3RAbWFpbC5jb20iLCJ1c2VybmFtZSI6InJlc3QgdXNlcm5hbWUgdGVzdCIsImlhdCI6MTY0Njk5MjgxNCwiZXhwIjoxNjQ2OTkzMDU0fQ.U2TjIXpXfyYQnZgByFTvSKWCj7wm2NTpGHXZVoXQ08I"
+}

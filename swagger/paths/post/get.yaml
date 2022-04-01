@@ -1,0 +1,32 @@
+/threads/{threadSlug}/posts:
+  get:
+    summary: Returns a list of posts that is within the thread
+    tags: [Post]
+    parameters:
+      - in: path
+        name: threadSlug
+        schema:
+          type: string
+        required: true
+        description: The slug of the thread
+    responses:
+      200:
+        description: An array of posts
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Post"
+      404:
+        description: Thread not found
+        content:
+          application/json:
+            example:
+              error: Thread not found
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error
