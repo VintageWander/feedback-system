@@ -113,7 +113,7 @@ userSchema.pre("remove", async function (next) {
     }
 
     const Post = require("./Post");
-    const posts = await Post.find({ creator: this._id });
+    const posts = await Post.find({ author: this._id });
     if (posts) {
       posts.forEach(async (post) => {
         await post.remove();
@@ -121,7 +121,7 @@ userSchema.pre("remove", async function (next) {
     }
 
     const Comment = require("./Comment");
-    const comments = await Comment.find({ creator: this._id });
+    const comments = await Comment.find({ author: this._id });
     if (comments) {
       comments.forEach(async (comment) => {
         await comment.remove();
