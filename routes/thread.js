@@ -79,9 +79,10 @@ router.post("/create", verifyAndGetUser, checkThreadForm, async (req, res) => {
 
     const subject = `New Thread: ${topic}`;
     const message = `${populatedThread.creator.username} has created a new thread: ${populatedThread.topic}!`;
-
-    const mailOptions = getMailOptions(receivers, subject, message);
-    transporter.sendMail(mailOptions);
+    if (receivers.length > 0) {
+      const mailOptions = getMailOptions(receivers, subject, message);
+      transporter.sendMail(mailOptions);
+    }
     return res.status(200).json(populatedThread);
   } catch (error) {
     console.log(error);

@@ -133,10 +133,10 @@ router.post(
           ? "Someone anonymous"
           : populatedPost.author.username
       } has posted in ${populatedPost.thread.topic}: ${populatedPost.title}!`;
-
-      const mailOptions = getMailOptions(receivers, subject, message);
-      transporter.sendMail(mailOptions);
-
+      if (receivers.length > 0) {
+        const mailOptions = getMailOptions(receivers, subject, message);
+        transporter.sendMail(mailOptions);
+      }
       return res.status(200).json(postDTO(populatedPost));
     } catch (error) {
       console.log(error);
