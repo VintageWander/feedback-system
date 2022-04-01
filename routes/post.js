@@ -88,7 +88,16 @@ router.post(
           promiseArray.push(
             cloudinary.uploader.upload(file.path, {
               resource_type: "auto",
-              allowed_formats: ["jpg", "png", "docx", "pdf", "yaml", "zip"],
+              allowed_formats: [
+                "jpg",
+                "jpeg",
+                "png",
+                "docx",
+                "pdf",
+                "yaml",
+                "zip",
+                "doc",
+              ],
               use_filename: true,
               unique_filename: true,
             })
@@ -214,6 +223,7 @@ router.put(
                 "docx",
                 "doc",
                 "pdf",
+                "zip",
                 "yaml",
               ],
               use_filename: true,
