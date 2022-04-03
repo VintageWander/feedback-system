@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
+const fs = require("fs");
+const ObjectsToCSV = require("objects-to-csv");
 
 const User = require("../models/User");
 const Thread = require("../models/Thread");
@@ -162,6 +164,75 @@ router.get("/posts", mustBe(["admin", "manager"]), async (req, res) => {
     return res.status(500).json({ err });
   }
 });
+
+router.get(
+  "/posts/export-csv",
+  mustBe(["admin", "manager"]),
+  async (req, res) => {
+    try {
+      const posts = await Post.find()
+        .select("-anonymous")
+        .populate(threadPopulate)
+        .populate(authorPopulate)
+        .populate(commentPopulate)
+        .populate(upvotePopulate)
+        .populate(downvotePopulate)
+        .sort({ createdAt: -1 });
+
+      const clonedPosts = postsDTO(posts);
+      const data = [];
+      clonedPosts.forEach((post) => {
+        console.log(post.thread.postDeadline);
+        console.log(
+          new Date(post.thread.postDeadline + 7 * 60 * 60 * 1000).toString()
+        );
+        console.log(
+          new Date(post.thread.commentDeadline + 7 * 60 * 60 * 1000).toString()
+        );
+        data.push({
+          Thread: post.thread.topic,
+          Creator: post.thread.creator.username,
+          "Post Deadline": new Date(
+            post.thread.postDeadline + 7 * 60 * 60 * 1000
+          ).toLocaleString(),
+          "Comment Deadline": new Date(
+            post.thread.commentDeadline + 7 * 60 * 60 * 1000
+          ).toLocaleString(),
+          Title: post.title,
+          Content: post.content + ".",
+          Author: post.author.username,
+          Role: post.author.role,
+          "Upvote count": post.upvotes.length,
+          "Downvote count": post.downvotes.length,
+          "Created at": new Date(
+            post.createdAt + 7 * 60 * 60 * 1000
+          ).toLocaleString(),
+          "Updated at": new Date(
+            post.updatedAt + 7 * 60 * 60 * 1000
+          ).toLocaleString(),
+        });
+      });
+      const csv = new ObjectsToCSV(data);
+      if (!(await csv.toString())) {
+        return res.status(400).json({
+          error: "No posts are available to export",
+        });
+      }
+      const filename = `posts-${Date.now()}.csv`;
+      await csv.toDisk(`./${filename}`);
+      return res.status(200).download(`./${filename}`, () => {
+        fs.unlink(`./${filename}`, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ err });
+    }
+  }
+);
 
 router.get(
   "/posts/:postSlug",
