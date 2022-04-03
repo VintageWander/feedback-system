@@ -9,6 +9,8 @@ const Thread = require("../models/Thread");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 
+const cloudinary = require("../cloudinary");
+
 const authorPopulate = require("../populate/author");
 const commentPopulate = require("../populate/comment");
 const threadPopulate = require("../populate/thread");
@@ -212,15 +214,25 @@ router.get(
         });
       }
       console.log(new Date().toLocaleString());
-      const filename = `posts-${Date.now()}.csv`;
+
+      const filename = `posts.csv`;
+
       await csv.toDisk(`./${filename}`);
-      return res.status(200).download(`./${filename}`, () => {
-        fs.unlink(`./${filename}`, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+      // change all comma to semi colon in the file
+      const file = fs.readFileSync(`./${filename}`, "utf-8");
+      const newFile = file.replace(/,/g, ";");
+
+      fs.writeFileSync(`./${filename}`, "\uFEFF" + newFile);
+
+      const result = await cloudinary.uploader.upload(`./${filename}`, {
+        resource_type: "auto",
+        unique_filename: false,
+        use_filename: true,
       });
+
+      fs.unlinkSync(`./${filename}`);
+
+      return res.status(200).json(result);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ err });
