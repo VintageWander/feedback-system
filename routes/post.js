@@ -270,7 +270,7 @@ router.delete(
       }
 
       await post.remove();
-      return res.status(200).json({ message: "Post deleted" });
+      return res.status(200).json({ message: "Idea deleted" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error });
@@ -321,7 +321,7 @@ router.post(
       await post.save();
       await user.save();
 
-      return res.status(200).json({ message: "Post upvoted" });
+      return res.status(200).json({ message: "Idea upvoted" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error });
@@ -363,7 +363,7 @@ router.post(
       user.downvotedPosts.push(post._id);
       await post.save();
       await user.save();
-      return res.status(200).json({ message: "Post downvoted" });
+      return res.status(200).json({ message: "Idea downvoted" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error });

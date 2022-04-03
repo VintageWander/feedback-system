@@ -17,7 +17,7 @@ const checkThreadForm = (req, res, next) => {
   if (!postDeadline || !commentDeadline) {
     return res
       .status(400)
-      .json({ error: "Both deadline for post and comment are required" });
+      .json({ error: "Both deadline for idea and comment are required" });
   }
   if (!isNumber(postDeadline) || !isNumber(commentDeadline)) {
     return res.status(400).json({ error: "Deadlines must be a long number" });
@@ -27,14 +27,14 @@ const checkThreadForm = (req, res, next) => {
   if (postDeadline < twoDaysFromNow || commentDeadline < twoDaysFromNow) {
     return res
       .status(400)
-      .json({ error: "Post or comment deadline must be at least 2 days" });
+      .json({ error: "Idea or comment deadline must be at least 2 days" });
   } else if (
     postDeadline > twoWeeksFromNow ||
     commentDeadline > twoWeeksFromNow
   ) {
     return res
       .status(400)
-      .json({ error: "Post or comment deadline must be at most 2 weeks" });
+      .json({ error: "Idea or comment deadline must be at most 2 weeks" });
   }
   next();
 };

@@ -16,7 +16,7 @@ const getPostBySlug = async (req, res, next) => {
       .populate(upvotePopulate)
       .populate(downvotePopulate)
       .sort({ createdAt: -1 });
-    if (!post) return res.status(404).json({ error: "Post not found" });
+    if (!post) return res.status(404).json({ error: "Idea not found" });
     req.post = post;
     next();
   } catch (error) {

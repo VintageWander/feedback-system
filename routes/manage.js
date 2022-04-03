@@ -90,14 +90,14 @@ router.put(
       if (postDeadline < twoDaysFromNow || commentDeadline < twoDaysFromNow) {
         return res
           .status(400)
-          .json({ error: "Post or comment deadline must be at least 2 days" });
+          .json({ error: "Idea or comment deadline must be at least 2 days" });
       } else if (
         postDeadline > twoWeeksFromNow ||
         commentDeadline > twoWeeksFromNow
       ) {
         return res
           .status(400)
-          .json({ error: "Post or comment deadline must be at most 2 weeks" });
+          .json({ error: "Idea or comment deadline must be at most 2 weeks" });
       }
       if (approved === undefined) {
         return res.status(400).json({ error: "Approved field is required" });
@@ -192,7 +192,7 @@ router.get(
         data.push({
           Thread: post.thread.topic,
           Creator: post.thread.creator.username,
-          "Post Deadline": new Date(
+          "Idea Deadline": new Date(
             post.thread.postDeadline + 7 * 60 * 60 * 1000
           ).toLocaleString(),
           "Comment Deadline": new Date(
@@ -246,7 +246,7 @@ router.get(
         .populate(upvotePopulate)
         .populate(downvotePopulate);
       if (!post) {
-        return res.status(404).json({ error: "Post not found" });
+        return res.status(404).json({ error: "Idea not found" });
       }
 
       return res.status(200).json(postDTO(post));
@@ -264,10 +264,10 @@ router.delete(
     try {
       const post = await Post.findOne({ slug: req.params.postSlug });
       if (!post) {
-        return res.status(404).json({ error: "Post not found" });
+        return res.status(404).json({ error: "Idea not found" });
       }
       await post.remove();
-      return res.status(200).json({ message: "Post deleted successfully" });
+      return res.status(200).json({ message: "Idea deleted successfully" });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error });
