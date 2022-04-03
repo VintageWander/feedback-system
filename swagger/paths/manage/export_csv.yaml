@@ -1,0 +1,33 @@
+/manage/posts/export-csv:
+  get:
+    summary: Export all posts within the system
+    tags: [Manage]
+    security:
+      - bearerAuth:
+    responses:
+      200:
+        description: The download process of the csv
+      400:
+        description: Logical error
+        content:
+          application/json:
+            example:
+              error: "Some error depending on the situation"
+      401:
+        description: Unauthorized (not logged in)
+        content:
+          application/json:
+            example:
+              error: Unauthorized
+      403:
+        description: Forbidden (permission denied)
+        content:
+          application/json:
+            example:
+              error: You are not authorized to view this page
+      500:
+        description: Internal server error
+        content:
+          application/json:
+            example:
+              error: Internal server error
