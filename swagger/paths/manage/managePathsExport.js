@@ -9,6 +9,8 @@ const get_posts = YAML.load("swagger/paths/manage/get_posts.yaml");
 const get_post = YAML.load("swagger/paths/manage/get_post.yaml");
 const delete_post = YAML.load("swagger/paths/manage/delete_post.yaml");
 
+const export_csv = YAML.load("swagger/paths/manage/export_csv.yaml");
+
 const get_comments = YAML.load("swagger/paths/manage/get_comments.yaml");
 const get_comment = YAML.load("swagger/paths/manage/get_comment.yaml");
 const delete_comment = YAML.load("swagger/paths/manage/delete_comment.yaml");
@@ -25,6 +27,7 @@ const managePathsExport = {
   ...delete_thread,
   ...get_posts,
   ...get_post,
+  ...export_csv,
   ...delete_post,
   ...get_comments,
   ...get_comment,
