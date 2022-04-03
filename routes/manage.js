@@ -182,13 +182,6 @@ router.get(
       const clonedPosts = postsDTO(posts);
       const data = [];
       clonedPosts.forEach((post) => {
-        console.log(post.thread.postDeadline);
-        console.log(
-          new Date(post.thread.postDeadline + 7 * 60 * 60 * 1000).toString()
-        );
-        console.log(
-          new Date(post.thread.commentDeadline + 7 * 60 * 60 * 1000).toString()
-        );
         data.push({
           Thread: post.thread.topic,
           Creator: post.thread.creator.username,
@@ -218,6 +211,7 @@ router.get(
           error: "No posts are available to export",
         });
       }
+      console.log(new Date().toLocaleString());
       const filename = `posts-${Date.now()}.csv`;
       await csv.toDisk(`./${filename}`);
       return res.status(200).download(`./${filename}`, () => {
