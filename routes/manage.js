@@ -225,7 +225,7 @@ router.get(
       const newFile = file.replace(/,/g, ";");
 
       fs.writeFileSync(`./${filename}`, "\uFEFF" + newFile);
-
+      await cloudinary.uploader.destroy(`${filename}`);
       const result = await cloudinary.uploader.upload(`./${filename}`, {
         resource_type: "auto",
         unique_filename: false,
@@ -279,6 +279,7 @@ router.get(
 
       zip.writeZip(`./out/${filename}`);
 
+      await cloudinary.uploader.destroy(`${filename}`);
       const result = await cloudinary.uploader.upload(`./out/${filename}`, {
         resource_type: "auto",
         unique_filename: false,
