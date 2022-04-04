@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
-const fs = require("fs");
 const ObjectsToCSV = require("objects-to-csv");
+const AdmZip = require("adm-zip");
+const fs = require("fs");
 
 const User = require("../models/User");
 const Thread = require("../models/Thread");
@@ -35,6 +36,7 @@ const objectMap = require("../utils/objectMap");
 const filterFalsey = require("../utils/filterFalsy");
 const isBool = require("../utils/isBool");
 const isNumber = require("../utils/isNumber");
+const downloadFile = require("../utils/downloadFile");
 
 router.get("/threads", mustBe(["admin", "manager"]), async (req, res) => {
   try {
@@ -231,6 +233,63 @@ router.get(
       });
 
       fs.unlinkSync(`./${filename}`);
+
+      return res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ err });
+    }
+  }
+);
+
+router.get(
+  "/posts/export-attachments",
+  mustBe(["admin", "manager"]),
+  async (req, res) => {
+    try {
+      const posts = await Post.find()
+        .select("-anonymous")
+        .populate(threadPopulate)
+        .populate(authorPopulate)
+        .populate(commentPopulate)
+        .populate(upvotePopulate)
+        .populate(downvotePopulate)
+        .sort({ createdAt: -1 });
+
+      let promiseArray = [];
+      posts.forEach((post) => {
+        post.files.forEach((file) => {
+          promiseArray.push(
+            downloadFile(file.url, `./downloads/${file.url.split("/").pop()}`)
+          );
+        });
+      });
+
+      await Promise.all(promiseArray);
+
+      const files = fs.readdirSync("./downloads");
+
+      const zip = new AdmZip();
+
+      files.forEach((file) => {
+        zip.addLocalFile(`./downloads/${file}`);
+      });
+
+      const filename = `attachments.zip`;
+
+      zip.writeZip(`./out/${filename}`);
+
+      const result = await cloudinary.uploader.upload(`./out/${filename}`, {
+        resource_type: "auto",
+        unique_filename: false,
+        use_filename: true,
+      });
+
+      fs.unlinkSync(`./out/${filename}`);
+
+      files.forEach((file) => {
+        fs.unlinkSync(`./downloads/${file}`);
+      });
 
       return res.status(200).json(result);
     } catch (err) {
