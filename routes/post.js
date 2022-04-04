@@ -110,7 +110,10 @@ router.post(
         if (resultErr) {
           return res.status(500).json({ error: resultErr });
         }
-        files.forEach((file) => fs.unlink(file.path, (err) => {}));
+        files.forEach((file) => {
+          if (file === ".gitkeep") return;
+          fs.unlink(file.path, (err) => {});
+        });
         results.forEach((result) => uploadedFiles.push(result));
       }
       const post = await Post.create({
@@ -233,7 +236,10 @@ router.put(
         });
 
         const results = await Promise.all(promiseArray);
-        files.forEach((file) => fs.unlink(file.path, (err) => {}));
+        files.forEach((file) => {
+          if (file === ".gitkeep") return;
+          fs.unlink(file.path, (err) => {});
+        });
         results.forEach((result) => {
           post.files.push(result);
         });

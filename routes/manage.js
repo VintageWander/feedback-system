@@ -289,6 +289,7 @@ router.get(
       fs.unlinkSync(`./out/${filename}`);
 
       files.forEach((file) => {
+        if (file === ".gitkeep") return;
         fs.unlinkSync(`./downloads/${file}`);
       });
 
