@@ -44,11 +44,8 @@ app.post("/test", (req, res) => {
 
 app.get("/batch_update", async (req, res) => {
   // try {
-  //   const obj = await Thread.findOne({
-  //     slug: "test-cascade-1647801977385",
-  //   });
-  //   await obj.remove();
-  //   return res.status(200).json({ message: "success" });
+  //   const obj = await Comment.find({ author: "6247332167299e0f3fcaa2eb" });
+  //   return res.status(200).json(obj);
   // } catch (err) {
   //   console.log(err);
   //   return res.status(500).json({ message: err.message });
