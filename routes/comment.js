@@ -16,6 +16,9 @@ const authorPopulate = require("../populate/author");
 const upvotePopulate = require("../populate/upvote");
 const downvotePopulate = require("../populate/downvote");
 
+const transporter = require("../transporter");
+const getMailOptions = require("../mailOptions");
+
 const commentDTO = require("../dto/commentDTO");
 const commentsDTO = require("../dto/commentsDTO");
 
@@ -80,9 +83,11 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
       slug: slugify(filterSpecialChar(title)) + "-" + Date.now(),
       createdAt: Date.now(),
     });
+
     if (!comment) {
       return res.status(500).json({ error: "Comment could not be created" });
     }
+
     post.comments.push(comment._id);
     await post.save();
     user.comments.push(comment._id);
@@ -97,6 +102,27 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
       .populate(authorPopulate)
       .populate(upvotePopulate)
       .populate(downvotePopulate);
+
+    const receiver = post.author.email;
+
+    const isSelf = isSameUser(userID, populatedComment.author._id);
+
+    const subject = `New comment on your post: ${post.title}!`;
+
+    const message = `${
+      populatedComment.anonymous
+        ? "Someone anonymous has"
+        : isSelf
+        ? "You have"
+        : populatedComment.author.username + " has"
+    } commented on your ${isSelf && "own"} post: ${
+      post.title
+    }. Come check it out!`;
+
+    if (receiver) {
+      const mailOptions = getMailOptions(receiver, subject, message);
+      transporter.sendMail(mailOptions);
+    }
 
     return res.status(200).json(commentDTO(populatedComment));
   } catch (error) {
