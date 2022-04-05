@@ -105,7 +105,7 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
 
     const receiver = post.author.email;
 
-    const isSelf = isSameUser(userID, populatedComment.author._id);
+    const isSelf = isSameUser(userID, populatedComment.post.author._id);
 
     const subject = `New comment on your post: ${post.title}!`;
 
