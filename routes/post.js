@@ -157,7 +157,7 @@ router.post(
       return res.status(200).json(postDTO(populatedPost));
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error: error });
+      return res.status(500).json({ error });
     }
   }
 );

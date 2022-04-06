@@ -3,7 +3,7 @@ const mustBe = (arrayOfRoles) => {
     if (arrayOfRoles.includes(req.user.role)) {
       return next();
     }
-    return res.status(403).json({ message: "You do not have permission" });
+    return res.status(403).json({ error: "You do not have permission" });
   };
 };
 

@@ -65,7 +65,7 @@ router.get(
       return res.status(200).json(threadDTO(thread));
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ err: error });
+      return res.status(500).json({ error });
     }
   }
 );
@@ -163,9 +163,9 @@ router.get("/posts", mustBe(["admin", "manager"]), async (req, res) => {
       .populate(downvotePopulate);
 
     return res.status(200).json(postsDTO(posts));
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
   }
 });
 
@@ -235,9 +235,9 @@ router.get(
       fs.unlinkSync(`./${filename}`);
 
       return res.status(200).json(result);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ err });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error });
     }
   }
 );
@@ -294,9 +294,9 @@ router.get(
       });
 
       return res.status(200).json(result);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ err });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error });
     }
   }
 );
@@ -317,9 +317,9 @@ router.get(
       }
 
       return res.status(200).json(postDTO(post));
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ err });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error });
     }
   }
 );
@@ -359,9 +359,9 @@ router.get("/comments", mustBe(["admin", "manager"]), async (req, res) => {
       .populate(downvotePopulate);
 
     return res.status(200).json(commentsDTO(comments));
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
   }
 });
 

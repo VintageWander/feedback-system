@@ -48,7 +48,7 @@ app.get("/batch_update", async (req, res) => {
   //   return res.status(200).json(obj);
   // } catch (err) {
   //   console.log(err);
-  //   return res.status(500).json({ message: err.message });
+  //   return res.status(500).json({ error: err.message });
   // }
   return res.status(200).json({ message: "success" });
 });

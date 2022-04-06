@@ -20,7 +20,7 @@ const verifyAndGetUser = (req, res, next) => {
       process.env.JWT_ACCESS_SECRET,
       async (err, decoded) => {
         if (err) {
-          return res.status(401).json({ message: "Unauthorized" });
+          return res.status(401).json({ error: "Unauthorized" });
         }
         const user = await User.findById(decoded.userID)
           .select(["-__v", "-refreshToken"])
@@ -68,9 +68,9 @@ const verifyAndGetUser = (req, res, next) => {
         next();
       }
     );
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
   }
 };
 

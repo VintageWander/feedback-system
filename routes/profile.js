@@ -30,19 +30,19 @@ router.put("/update", verifyAndGetUser, checkRegisterForm, async (req, res) => {
     const { username, email, password, oldPassword } = req.body;
     if ((await User.exists({ username })) || (await User.exists({ email }))) {
       return res.status(400).json({
-        message: "Username or email already exists",
+        error: "Username or email already exists",
       });
     }
 
     if (!oldPassword) {
       return res.status(400).json({
-        message: "Please enter your old password",
+        error: "Please enter your old password",
       });
     }
 
     if (oldPassword !== user.password) {
       return res.status(400).json({
-        message: "Old password is incorrect",
+        error: "Old password is incorrect",
       });
     }
 
