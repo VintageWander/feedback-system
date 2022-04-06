@@ -23,7 +23,7 @@ const getMailOptions = (receivers, subject, message) => {
 								transform: translate(-50%, -50%);
 							"
 						>
-							New post has been posted bla bla bla bla bla bla bla
+							${message}
 						</h4>
 					</div>
 					<style>
