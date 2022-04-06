@@ -75,7 +75,6 @@ router.post(
 
       const userID = user._id;
       const threadID = thread._id;
-
       if (thread.postDeadline < Date.now()) {
         return res
           .status(400)
