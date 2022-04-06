@@ -19,14 +19,14 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  anonymous: {
-    type: Boolean,
-    default: false,
-    required: true,
-  },
   slug: {
     type: String,
     unique: true,
+    required: true,
+  },
+  anonymous: {
+    type: Boolean,
+    default: false,
     required: true,
   },
   upvotes: [

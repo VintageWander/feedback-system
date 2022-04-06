@@ -25,6 +25,10 @@ Thread:
       type: number
       required: true
       description: A deadline to stop commenting and up/downvote comments activities
+    approved:
+      type: boolean
+      required: true
+      description: A boolean value to show the approved state of the thread
     posts:
       type: array
       items:
