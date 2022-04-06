@@ -13,7 +13,13 @@ const getMailOptions = (receivers, subject, message) => {
 					<div style="position: relative; text-align: center">
 						<img
 							src="https://cdn.dribbble.com/users/225098/screenshots/14502339/media/15d5fd784601b442f9e9bba315fdd2e7.jpg?compress=1&resize=1200x900&vertical=top"
-							style="width: 50%; min-height: 400px; max-height: 900px; min-width: 500px"
+							style="
+								width: 50%;
+								min-height: 375px;
+								max-height: 900px;
+								min-width: 500px;
+								max-width: 1200px;
+							"
 						/>
 						<h4
 							style="
@@ -27,9 +33,15 @@ const getMailOptions = (receivers, subject, message) => {
 						</h4>
 					</div>
 					<style>
-						@media screen and (max-width: 1100px) {
+						@media screen and (max-width: 1200px) {
 							h4 {
 								font-size: 18px;
+								top: 90%;
+							}
+						}
+						@media screen and (max-width: 1000px) {
+							h4 {
+								font-size: 16px;
 								top: 90%;
 							}
 						}
