@@ -206,9 +206,9 @@ router.put(
           );
         });
 
-        await Promise.all(promiseArray).catch((err) => {
-          console.log(err);
-          return res.status(400).json({ err });
+        await Promise.all(promiseArray).catch((error) => {
+          console.log(error);
+          return res.status(400).json({ error });
         });
 
         promiseArray = [];
