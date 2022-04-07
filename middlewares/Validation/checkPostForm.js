@@ -14,6 +14,8 @@ const checkPostForm = (req, res, next) => {
   if (!req.body.content) {
     return res.status(400).json({ error: "Content is empty" });
   }
+  // replace %&%& with blank
+  req.body.content = req.body.content.replace(/%&%&/g, "");
   req.body.anonymous = anonymous === "true";
   if (!isBool(req.body.anonymous)) {
     return res
