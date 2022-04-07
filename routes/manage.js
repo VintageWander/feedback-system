@@ -196,7 +196,7 @@ router.get(
             post.thread.commentDeadline + 7 * 60 * 60 * 1000
           ).toLocaleString(),
           Title: post.title,
-          Content: post.content + ".",
+          Content: post.content.split(",").join("%&%&") + ".",
           Author: post.author.username,
           Role: post.author.role,
           "Upvote count": post.upvotes.length,
@@ -209,22 +209,26 @@ router.get(
           ).toLocaleString(),
         });
       });
+
       const csv = new ObjectsToCSV(data);
+
       if (!(await csv.toString())) {
         return res.status(400).json({
           error: "No posts are available to export",
         });
       }
+
       console.log(new Date().toLocaleString());
 
       const filename = `posts.csv`;
 
       await csv.toDisk(`./${filename}`);
-      // change all comma to semi colon in the file
+      //change all comma to semi colon in the file
       const file = fs.readFileSync(`./${filename}`, "utf-8");
-      const newFile = file.replace(/,/g, ";");
+      const newFile = file.replace(/,/g, ";").replace(/%&%&/g, ",");
 
       fs.writeFileSync(`./${filename}`, "\uFEFF" + newFile);
+
       await cloudinary.uploader.destroy(`${filename}`);
       const result = await cloudinary.uploader.upload(`./${filename}`, {
         resource_type: "auto",
