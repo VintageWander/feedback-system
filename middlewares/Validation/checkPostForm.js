@@ -11,11 +11,12 @@ const checkPostForm = (req, res, next) => {
     return res.status(400).json({ error: "Title is empty" });
   }
   req.body.content = keepOneSpace(content.trim());
+  req.body.content = req.body.content.replace(/%&%&/g, "");
+
   if (!req.body.content) {
     return res.status(400).json({ error: "Content is empty" });
   }
   // replace %&%& with blank
-  req.body.content = req.body.content.replace(/%&%&/g, "");
   req.body.anonymous = anonymous === "true";
   if (!isBool(req.body.anonymous)) {
     return res
