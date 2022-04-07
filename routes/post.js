@@ -234,7 +234,13 @@ router.put(
           );
         });
 
-        const results = await Promise.all(promiseArray);
+        let resultErr = null;
+        const results = await Promise.all(promiseArray).catch((err) => {
+          resultErr = err;
+        });
+        if (resultErr) {
+          return res.status(500).json({ error: resultErr });
+        }
         files.forEach((file) => {
           if (file === ".gitkeep") return;
           fs.unlink(file.path, (err) => {});
