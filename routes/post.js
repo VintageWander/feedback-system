@@ -352,13 +352,17 @@ router.post(
           .status(400)
           .json({ error: "Deadline for downvoting posts has passed" });
       }
+
       const userID = user._id;
+
       const isUpvoted = post.upvotes.some(
         (upvoteUser) => upvoteUser._id.toString() === userID.toString()
       );
+
       const isDownvoted = post.downvotes.some(
         (downvoteUser) => downvoteUser._id.toString() === userID.toString()
       );
+
       if (isDownvoted) {
         post.downvotes = filterArrayByID(post.downvotes, userID);
         user.downvotedPosts = filterArrayByID(user.downvotedPosts, post._id);
@@ -366,14 +370,18 @@ router.post(
         await user.save();
         return res.status(200).json({ message: "Unvote post successfully" });
       }
+
       if (isUpvoted) {
         post.upvotes = filterArrayByID(post.upvotes, userID);
         user.upvotedPosts = filterArrayByID(user.upvotedPosts, post._id);
       }
+
       post.downvotes.push(userID);
       user.downvotedPosts.push(post._id);
+
       await post.save();
       await user.save();
+
       return res.status(200).json({ message: "Idea downvoted" });
     } catch (error) {
       console.log(error);
