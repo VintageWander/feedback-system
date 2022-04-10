@@ -115,7 +115,7 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
         : isSelf
         ? "You have"
         : populatedComment.author.username + " has"
-    } commented on your ${isSelf && "own"} post: ${
+    } commented on your ${isSelf ? "own " : ""}post: ${
       post.title
     }. Come check it out!`;
 
