@@ -276,6 +276,7 @@ router.get(
       const zip = new AdmZip();
 
       files.forEach((file) => {
+        if (file === ".gitkeep") return;
         zip.addLocalFile(`./downloads/${file}`);
       });
 
