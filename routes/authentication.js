@@ -36,41 +36,53 @@ router.post("/register", checkRegisterForm, async (req, res) => {
 
 router.post("/login", checkLoginForm, async (req, res) => {
   try {
+    // get the email and the password from the login form
     const { email, password } = req.body;
+    // check if the user exists
     const user = await User.findOne({ email, password }).select({
       username: 1,
       email: 1,
       slug: 1,
       role: 1,
     });
+    // if the user does not exist
     if (!user) {
+      // return an error
       return res.status(403).json({ error: "Invalid credentials" });
     }
+    // if the user exists
+    // create an access token
     const accessToken = jwt.sign(
       { userID: user._id, email: user.email, username: user.username },
       process.env.JWT_ACCESS_SECRET,
       { expiresIn: "15m" }
     );
+    // create a refresh token
     const refreshToken = jwt.sign(
       { userID: user._id, email: user.email, username: user.username },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "1h" }
     );
+    // assign the refresh token to the user
     user.refreshToken = refreshToken;
     await user.save();
+    // filter the output object
     const filteredUser = {
       username: user.username,
       email: user.email,
       role: user.role,
       slug: user.slug,
     };
+    // return both the access, refresh tokens, and the user data
     return res.status(200).json({
       accessToken,
       refreshToken,
       user: filteredUser,
     });
   } catch (error) {
+    // if there's an error, log the error
     console.log(error);
+    // and return an error
     return res.status(500).json({ error });
   }
 });
