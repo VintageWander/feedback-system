@@ -59,21 +59,28 @@ router.get("/", async (req, res) => {
 
 router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
   try {
+    // get the title, content, anonymous from create comment form sent from the front end
     const { title, content, anonymous } = req.body;
+    // retreive the user, thread, post from middlewares
     const { user, thread, post } = req;
+    // get user id
     const userID = user._id;
+    // get post id
     const postID = post._id;
+    // return an error if the same comment title exists
     if (await Comment.exists({ slug: slugify(title) })) {
       return res
         .status(400)
         .json({ error: "Comment with the same title already exists" });
     }
+    // if the current time surpasses the thread's comment deadline
     if (thread.commentDeadline < Date.now()) {
+      // return an error
       return res
         .status(400)
         .json({ error: "Deadline for commenting has passed" });
     }
-
+    // create a new comment
     const comment = await Comment.create({
       title,
       content,
@@ -83,16 +90,18 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
       slug: slugify(filterSpecialChar(title)) + "-" + Date.now(),
       createdAt: Date.now(),
     });
-
+    // returns an error if the creation process fails
     if (!comment) {
       return res.status(500).json({ error: "Comment could not be created" });
     }
-
+    // push the comment id as a reference into the list of comments in the post
     post.comments.push(comment._id);
     await post.save();
+    // push the comment id as a reference into the list of comments of the user
     user.comments.push(comment._id);
     await user.save();
 
+    // get full detail of the created comment
     const populatedComment = await Comment.findById(comment._id)
       .populate({
         path: "post",
@@ -103,12 +112,16 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
       .populate(upvotePopulate)
       .populate(downvotePopulate);
 
+    // get the author's email of the post
     const receiver = post.author.email;
 
+    // check if the comment's author is the same as the post's author
     const isSelf = isSameUser(userID, populatedComment.post.author._id);
 
+    // write a subject for the email
     const subject = `New comment on your post: ${post.title}!`;
 
+    // write the content of the email
     const message = `${
       populatedComment.anonymous
         ? "Someone anonymous has"
@@ -119,11 +132,13 @@ router.post("/create", checkCommentForm, verifyAndGetUser, async (req, res) => {
       post.title
     }. Come check it out!`;
 
+    // if the receiver exists
     if (receiver) {
+      // send an email to the receiver
       const mailOptions = getMailOptions(receiver, subject, message);
       transporter.sendMail(mailOptions);
     }
-
+    // return full comment details
     return res.status(200).json(commentDTO(populatedComment));
   } catch (error) {
     console.log(error);
