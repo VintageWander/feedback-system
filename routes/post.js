@@ -295,43 +295,56 @@ router.post(
   getPostBySlug,
   async (req, res) => {
     try {
+      // get the user, thread, and post from middlewares
       const { user, thread, post } = req;
 
+      // if the current date surpasses the post deadline, return error
       if (thread.postDeadline < Date.now()) {
         return res
           .status(400)
           .json({ error: "Deadline for upvoting posts has passed" });
       }
 
+      // get the user id
       const userID = user._id;
 
+      // check if the user has already upvoted the post
       const isUpvoted = post.upvotes.some(
         (upvoteUser) => upvoteUser._id.toString() === userID.toString()
       );
 
+      // check if the user has already downvoted the post
       const isDownvoted = post.downvotes.some(
         (downvoteUser) => downvoteUser._id.toString() === userID.toString()
       );
 
+      // if the user has already upvoted the post
       if (isUpvoted) {
+        // remove the user id from the list of upvotes in that post
         post.upvotes = filterArrayByID(post.upvotes, userID);
+        // remove the post from the user's list of upvoted posts
         user.upvotedPosts = filterArrayByID(user.upvotedPosts, post._id);
         await post.save();
         await user.save();
+        // return message saying the user has removed their upvote
         return res.status(200).json({ message: "Unvote post successfully" });
       }
 
+      // if the user has already downvoted the post
       if (isDownvoted) {
+        // remove the user id from the list of downvotes in that post
         post.downvotes = filterArrayByID(post.downvotes, userID);
+        // remove the post from the user's list of downvoted posts
         user.downvotedPosts = filterArrayByID(user.downvotedPosts, post._id);
       }
-
+      // add the user id to the list of upvotes in that post
       post.upvotes.push(userID);
+      // add the post to the user's list of upvoted posts
       user.upvotedPosts.push(post._id);
 
       await post.save();
       await user.save();
-
+      // return message saying the user has upvoted the post
       return res.status(200).json({ message: "Idea upvoted" });
     } catch (error) {
       console.log(error);
