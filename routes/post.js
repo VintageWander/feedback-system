@@ -64,22 +64,29 @@ router.get("/", async (req, res) => {
 
 router.post(
   "/create",
-  upload.array("files", 25),
+  // get the files from the request
+  upload.array("files", 5),
+  // validate the idea form
   checkPostForm,
+  // verify and get user info
   verifyAndGetUser,
   async (req, res) => {
     try {
+      // get the values from the request after validation
       const { title, content, anonymous } = req.body;
+      // get the user and the thread information from the request
       const { user, thread } = req;
       let uploadedFiles = [];
 
       const userID = user._id;
       const threadID = thread._id;
+      // error if the current time is greater than the thread's idea deadline
       if (thread.postDeadline < Date.now()) {
         return res
           .status(400)
           .json({ error: "Deadline for posting has passed" });
       }
+      // file upload
       if (req.files.length > 0) {
         const files = req.files;
         const promiseArray = [];
@@ -164,7 +171,7 @@ router.post(
 
 router.put(
   "/update/:postSlug",
-  upload.array("files", 25),
+  upload.array("files", 5),
   checkPostForm,
   verifyAndGetUser,
   getPostBySlug,
