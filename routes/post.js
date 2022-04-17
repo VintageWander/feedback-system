@@ -64,7 +64,7 @@ router.get("/", async (req, res) => {
 
 router.post(
   "/create",
-  // get the files from the request
+  // get the files from the request, maximum of 5
   upload.array("files", 5),
   // validate the idea form
   checkPostForm,
@@ -146,12 +146,15 @@ router.post(
         .populate(downvotePopulate)
         .sort({ createdAt: 1 });
 
+      // get all email addresses of users with admin and coordinator role
       const receivers = await User.find({
         role: ["admin", "coordinator"],
       }).select("email -_id");
 
+      // Write the subject with the thread topic
       const subject = `New post in thread ${thread.topic}`;
 
+      // Write the message, hide information of users who posts anonymously
       const message = `${
         populatedPost.anonymous
           ? "Someone anonymous"
