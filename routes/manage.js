@@ -72,13 +72,18 @@ router.get(
 
 router.put(
   "/threads/update/:threadSlug",
+  // role checking
   mustBe(["admin", "manager"]),
   getThreadBySlug,
   async (req, res) => {
     try {
+      // take the thread from the request
       const { thread } = req;
+      // take the 2 deadlines for the post, with the approved status,
+      // from the update form
       const { postDeadline, commentDeadline, approved } = req.body;
 
+      // form validation before updating the thread
       if (!postDeadline || !commentDeadline) {
         return res
           .status(400)
@@ -112,17 +117,20 @@ router.put(
           .json({ error: "Approved field must be a boolean" });
       }
 
+      // updates the thread
       thread.postDeadline = postDeadline || thread.postDeadline;
       thread.commentDeadline = commentDeadline || thread.commentDeadline;
       thread.approved = approved;
       thread.updatedAt = Date.now();
 
+      // saves the result to the database
       await thread.save();
 
       const populatedThread = await Thread.findById(thread._id)
         .populate(creatorPopulate)
         .populate(postPopulate);
 
+      // return the appropriate response
       return res.status(200).json(threadDTO(populatedThread));
     } catch (error) {
       console.log(error);

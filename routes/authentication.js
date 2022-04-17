@@ -39,7 +39,10 @@ router.post("/login", checkLoginForm, async (req, res) => {
     // get the email and the password from the login form
     const { email, password } = req.body;
     // check if the user exists
-    const user = await User.findOne({ email, password }).select({
+    const user = await User.findOne({
+      email,
+      password,
+    }).select({
       username: 1,
       email: 1,
       slug: 1,
